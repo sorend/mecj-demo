@@ -1,0 +1,22 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+mainClassName = 'svu.testing.WebApplication'
+
+jar {
+	baseName = 'mecj'
+	version = '0.0.1'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile "org.webbitserver:webbit:0.4.15"
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.3'
+}
