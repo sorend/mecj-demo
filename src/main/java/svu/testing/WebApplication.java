@@ -74,6 +74,14 @@ public class WebApplication {
 		os.write(message.toByteArray());
 		os.close();
 	}
+	
+	public static Map<String, String> CONTENT_TYPES = new HashMap<String, String>();
+	static {
+		CONTENT_TYPES.put("png", "image/png");
+		CONTENT_TYPES.put("js", "application/javascript");
+		CONTENT_TYPES.put("html", "text/html");
+		CONTENT_TYPES.put("css", "text/css");
+	}
 
 	public static class StaticContentHandler implements HttpHandler {
 		private File path;
@@ -99,7 +107,9 @@ public class WebApplication {
 					b.write(buf, 0, read);
 				}
 				fr.close();
-				sendResponse(t, 200, b, null);
+				String ext = get.getName().substring(get.getName().lastIndexOf(".") + 1);
+				String ct = CONTENT_TYPES.get(ext.toLowerCase());
+				sendResponse(t, 200, b, ct);
 			}
 		}
 	}
