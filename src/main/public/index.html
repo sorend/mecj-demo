@@ -1,9 +1,9 @@
 <!doctype html>
 <html>
 <head>
-	<link href="/css/bootstrap.min.css" rel="stylesheet"/>
-	<link href="/css/bootstrap-theme.min.css" rel="stylesheet"/>
-	<link href="/css/rangeslider.min.css" rel="stylesheet"/>
+	<link href="/public/css/bootstrap.min.css" rel="stylesheet"/>
+	<link href="/public/css/bootstrap-theme.min.css" rel="stylesheet"/>
+	<link href="/public/css/rangeslider.min.css" rel="stylesheet"/>
 </head>
 <body>
 	<div class="container-fluid">
@@ -62,9 +62,9 @@
 		</div>
 	</form>
 	</div>
-	<script src="/js/jquery-2.1.3.min.js"></script>
-	<script src="/js/bootstrap.min.js"></script>
-	<script src="/js/rangeslider.min.js"></script>
+	<script src="/public/js/jquery-2.1.3.min.js"></script>
+	<script src="/public/js/bootstrap.min.js"></script>
+	<script src="/public/js/rangeslider.min.js"></script>
 	<script>
 		// show selected value
 		function outputValue(elem) {
@@ -84,13 +84,13 @@
 		$("button.results").click(function(e){
 			e.preventDefault();
 			var data = $("form").serialize();
-			var result = $(".result").removeClass("alert-success alert-danger alert-info");
+			var result = $(".result");
 			$.ajax("/predict", { dataType:"json", data:data })
 				.done(function(data){
 					if (data.result == 1)
-						result.addClass("alert-danger").html("<img src=/css/icon_1.png/> Sorry, you have diabetes :-(");
+						result.removeClass("alert-success alert-danger alert-info").addClass("alert-danger").html("<img src=/public/css/icon_1.png/> Sorry, you have diabetes :-(");
 					else
-						result.addClass("alert-success").html("<img src=/css/icon_0.png/> Congratulations, you do not have diabetes :-)");
+						result.removeClass("alert-success alert-danger alert-info").addClass("alert-success").html("<img src=/public/css/icon_0.png/> Congratulations, you do not have diabetes :-)");
 				})
 				.fail(function(){
 					result.addClass("alert-danger").html("Error communicating with server.");
