@@ -125,7 +125,7 @@ public class MECMain {
 	public static void diabetesTest() throws Exception {
 
 		// read dataset
-		Reader reader = new InputStreamReader(MECMain.class.getResourceAsStream("diabetes.csv"));
+		Reader reader = new InputStreamReader(MECMain.class.getResourceAsStream("/diabetes.csv"));
 		double[][] data = CSVUtil.load(reader);
 		double[][] X = CSVUtil.attributes(data);
 		int[]      Y = CSVUtil.classes(data);
