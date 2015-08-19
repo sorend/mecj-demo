@@ -14,7 +14,7 @@ public class DecisionRule {
 	
 	public boolean isActive(double[] normal, double[] current) {
 		boolean val = Math.abs(normal[position] - current[position]) > SIGNIFICANCE; 
-		System.out.println("comparing " + (char)((int)normal[position]) + " with " + (char)((int)current[position]) + " => " + val);
+		// System.out.println("comparing " + (char)((int)normal[position]) + " with " + (char)((int)current[position]) + " => " + val);
 		return val;
 	}
 	

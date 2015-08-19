@@ -25,7 +25,7 @@ public class DecisionRuleClassifier {
 		int[] yPredicted = new int[X.length];
 		
 		for (int i = 0; i < X.length; i++) {
-			System.out.println("- predicting " + i);
+			// System.out.println("- predicting " + i);
 			boolean set = false;
 			for (int j = 0; !set && j < rules.length; j++) {
 				if (rules[j].isActive(normal, X[i])) {
