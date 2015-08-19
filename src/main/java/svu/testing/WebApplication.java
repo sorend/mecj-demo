@@ -13,6 +13,9 @@ import java.util.Map;
 
 import svu.meclassifier.MinkowskiDistanceFunction;
 import svu.meclassifier.MultimodalEvolutionaryClassifier;
+import svu.proteinsequences.DecisionRuleClassifier;
+import svu.proteinsequences.ProteinSequence;
+import svu.proteinsequences.ProteinSequenceClassifiers;
 import svu.util.CSVUtil;
 
 import com.sun.net.httpserver.HttpExchange;
@@ -22,6 +25,8 @@ import com.sun.net.httpserver.HttpServer;
 public class WebApplication {
 
 	private static MultimodalEvolutionaryClassifier mec = null;
+	
+	private static DecisionRuleClassifier psCls = null;
 	
 	private static double param(Map<String, String> req, String key) {
 		return Double.parseDouble(req.get(key));
@@ -43,7 +48,6 @@ public class WebApplication {
 	    return result;
 	}		
 	
-
 	private static double[] params(HttpExchange t) {
 		
 		Map<String, String> req = queryToMap(t.getRequestURI().getQuery());
@@ -129,6 +133,26 @@ public class WebApplication {
 			}
 		}
 	}
+	
+	public static class ProteinSequenceHandler implements HttpHandler {
+		
+		@Override
+		public void handle(HttpExchange t) throws IOException {
+			if (psCls == null) {
+				sendResponse(t, 500, "Classifier not ready", "text/plain");
+			}
+			else {
+				
+				Map<String, String> req = queryToMap(t.getRequestURI().getQuery());
+				String seq = req.get("seq");
+				double[] seqD = ProteinSequence.stringToDoubles(seq);
+				int[] prediction = psCls.predict(new double[][]{ seqD });
+				// send reply to client
+				sendResponse(t, 200, "{\"result\":" + prediction[0] + "}", "application/json");
+			}
+		}
+	}
+
 
 	public static void main(String[] args) throws Exception {
 
@@ -139,12 +163,15 @@ public class WebApplication {
 		HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
 		server.createContext("/public", new StaticContentHandler("/public", path));
 		server.createContext("/predict", new PredictionHandler());
+		server.createContext("/predict-ps", new ProteinSequenceHandler());
 		server.start();
 		
 		System.out.println("Web-server started, please open http://127.0.0.1:8080/public/index.html");
 		
 		MultimodalEvolutionaryClassifier classifier =
 				new MultimodalEvolutionaryClassifier(100, MinkowskiDistanceFunction.Factory(3.0));
+		
+		psCls = ProteinSequenceClassifiers.newStatic();
 		
 		// read dataset
 		Reader reader = new InputStreamReader(WebApplication.class.getResourceAsStream("/diabetes.csv"));

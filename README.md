@@ -13,6 +13,8 @@ You can also start the demonstrator web application through Gradle:
 
     ./gradlew run
 
-Then open the URL in your browser http://127.0.0.1:8080/public/index.html
+Then open one of the following URLs in your browser:
 
+- http://127.0.0.1:8080/public/index.html (prediction using MEC)
+- http://127.0.0.1:8080/public/ps.html    (prediction using RBDC)
 

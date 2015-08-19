@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+	<link href="/public/css/bootstrap.min.css" rel="stylesheet"/>
+	<link href="/public/css/bootstrap-theme.min.css" rel="stylesheet"/>
+	<link href="/public/css/rangeslider.min.css" rel="stylesheet"/>
+</head>
+<body>
+	<div class="container-fluid">
+	<h1>Diabetes predictor from protein sequence</h1>
+	<div class="result alert alert-info" role="alert">Fill your details and click "Get result"</div>
+	<form>
+		<div class="row">
+			<div class="col-xs-12">
+				<textarea name="seq"></textarea>
+			</div>
+		</div>
+		<button class="btn btn-default results">Get result</button>
+	</form>
+	</div>
+	<script src="/public/js/jquery-2.1.3.min.js"></script>
+	<script src="/public/js/bootstrap.min.js"></script>
+	<script src="/public/js/rangeslider.min.js"></script>
+	<script>
+		// show selected value
+		function outputValue(elem) {
+			var val = elem.val();
+			elem.closest("div").find("output").html(val);
+		}
+
+		// init
+		var elems = $("input[type=range]");
+		elems.rangeslider({polyfill: false});
+		elems.each(function(idx, elem){ outputValue($(elem)); })
+			.change(function(e){
+				outputValue($(e.target));
+			});
+		
+		// handle form
+		$("button.results").click(function(e){
+			e.preventDefault();
+			var data = $("form").serialize();
+			var result = $(".result");
+			$.ajax("/predict-ps", { dataType:"json", data:data })
+				.done(function(data){
+					if (data.result == 1)
+						result.removeClass("alert-success alert-danger alert-info").addClass("alert-danger").html("<img src=/public/css/icon_1.png/> Sorry, you have diabetes :-(");
+					else
+						result.removeClass("alert-success alert-danger alert-info").addClass("alert-success").html("<img src=/public/css/icon_0.png/> Congratulations, you do not have diabetes :-)");
+				})
+				.fail(function(){
+					result.addClass("alert-danger").html("Error communicating with server.");
+				});
+			return false;
+		});
+		
+		function randomFloat(min, max) {
+			return Math.random() * (max - min) + min;
+		}
+		
+		function randomInt(min, max) {
+			return Math.floor(Math.random() * (max - min + 1)) + min;
+		}
+		
+		function isInt(a) {
+			return a % 1 === 0;
+		}
+		
+		$("button.randomize").click(function(e){
+			e.preventDefault();
+			
+			elems.each(function(idx, elem){
+				var input = $(elem);
+				var min = parseFloat(input.attr("min")),
+					max = parseFloat(input.attr("max"));
+
+				var rnd = (isInt(min) && isInt(max)) ? randomInt(min, max) : randomFloat(min, max);
+				input.val(rnd).change();
+			});
+			
+			return false;
+		});
+		
+	</script>
+</body>
+</html>
