@@ -16,7 +16,7 @@ public class DecisionRuleClassifier {
 	public int numChromosomes = 100;
 	public int elitism = 5;
 	public double mutationProbability = 0.1;
-	public int generations = 100;
+	public int generations = 1000;
 	
 	private DecisionRule[] rules;
 	private double[] negativeExample;

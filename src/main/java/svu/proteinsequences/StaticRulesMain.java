@@ -28,7 +28,7 @@ public class StaticRulesMain {
 		System.out.println("  Y_pred = " + ListUtil.prettyArray(Y_pred));
 		System.out.println("Accuracy = " + accuracy);
 		
-		DecisionRuleClassifier clfGA = ProteinSequenceClassifiers.newGenetic(data, 10);
+		DecisionRuleClassifier clfGA = ProteinSequenceClassifiers.newGenetic(data, 3);
 		Y_pred = clfGA.predict(X);
 		
 		accuracy = AccuracyHelper.accuracy(Y, Y_pred);
