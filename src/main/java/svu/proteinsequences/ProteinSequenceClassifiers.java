@@ -30,5 +30,13 @@ public class ProteinSequenceClassifiers {
 		
 	}
 	
-	
+	public static DecisionRuleClassifier newGenetic(ProteinSequence[] data, int maxRules) throws Exception {
+		
+		double[][] X = ProteinSequence.xValues(data);
+		int[] Y = ProteinSequence.yValues(data);
+
+		// create classifier and "fit" rules (uses GA inside).
+		return new DecisionRuleClassifier(data[0].sequence).maxRules(maxRules).fit(X, Y);
+	}
+
 }

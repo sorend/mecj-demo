@@ -5,39 +5,39 @@ import svu.util.ListUtil;
 
 public class StaticRulesMain {
 	
-	private static double[][] xValues(ProteinSequence[] ps) {
-		double[][] X = new double[ps.length][];
-		for (int i = 0; i < ps.length; i++)
-			X[i] = ps[i].sequence;
-		return X;
-	}
-	
-	private static int[] yValues(ProteinSequence[] ps) {
-		int[] Y = new int[ps.length];
-		for (int i = 0; i < ps.length; i++)
-			Y[i] = ps[i].cls;
-		return Y;
-	}
-
 	public static void main(String[] args) throws Exception {
 
 		// load data
 		ProteinSequence[] data = ProteinSequence.load("/ps.data");
+		// 
+		double[][] X = ProteinSequence.xValues(data);
+		int[] Y = ProteinSequence.yValues(data);
 		
 		// build static classifier
 		DecisionRuleClassifier clfStatic = ProteinSequenceClassifiers.newStatic();
 		
-		// 
-		double[][] X = xValues(data);
-		int[] Y = yValues(data);
-
+		// predict
 		int[] Y_pred = clfStatic.predict(X);
-		
+
+		// calculate accuracy
 		double accuracy = AccuracyHelper.accuracy(Y, Y_pred);
-		
+
+		System.out.println("Using static rules:");
+		System.out.println("" + clfStatic.toString() + "\n");
 		System.out.println("       Y = " + ListUtil.prettyArray(Y));
 		System.out.println("  Y_pred = " + ListUtil.prettyArray(Y_pred));
-		
 		System.out.println("Accuracy = " + accuracy);
+		
+		DecisionRuleClassifier clfGA = ProteinSequenceClassifiers.newGenetic(data, 10);
+		Y_pred = clfGA.predict(X);
+		
+		accuracy = AccuracyHelper.accuracy(Y, Y_pred);
+		
+		System.out.println("Using GA with 10 rules:");
+		System.out.println("" + clfGA.toString() + "\n");
+		System.out.println("       Y = " + ListUtil.prettyArray(Y));
+		System.out.println("  Y_pred = " + ListUtil.prettyArray(Y_pred));
+		System.out.println("Accuracy = " + accuracy);
+
 	}
 }

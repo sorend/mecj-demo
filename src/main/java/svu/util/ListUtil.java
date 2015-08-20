@@ -10,6 +10,21 @@ import java.util.Map;
 import java.util.Random;
 
 public class ListUtil {
+	
+	public static double[] intToDoubles(int[] a) {
+		double[] b = new double[a.length];
+		for (int i = 0; i < a.length; i++)
+			b[i] = (double) a[i];
+		return b;
+	}
+
+	public static int[] range(int a, int b) {
+		int l = b - a;
+		int[] vals = new int[l];
+		for (int i = 0; i < l; i++)
+			vals[i] = a + i;
+		return vals;
+	}
 
 	public static int[] choice(List<Integer> range, int k, Random random) {
 		List<Integer> copy = new ArrayList<Integer>(range);
