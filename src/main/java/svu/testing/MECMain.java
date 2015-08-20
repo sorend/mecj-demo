@@ -3,7 +3,6 @@ package svu.testing;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
@@ -95,7 +94,7 @@ public class MECMain {
 		ExecutorService pool = Executors.newFixedThreadPool(cores);
 
 		// submit jobs
-		List<Future<Double>> jobs = new ArrayList();
+		List<Future<Double>> jobs = new ArrayList<Future<Double>>();
 		for (int i = 0; i < rounds; i++)
 			jobs.add(pool.submit(buildCallable(X, Y, df)));
 

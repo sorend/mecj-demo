@@ -163,7 +163,7 @@ public class ListUtil {
 	}
 	
 	public static int[] unique(int[] a) {
-		Map<Integer, Integer> map = new HashMap();
+		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
 		
 		for (int i = 0; i < a.length; i++)
 			map.put(a[i], i);
