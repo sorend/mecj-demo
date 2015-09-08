@@ -2,6 +2,7 @@ package svu.evolutionary;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static svu.util.ListUtil.*;
@@ -13,7 +14,9 @@ public abstract class BaseGeneticAlgorithm {
 		Logger logger = Logger.getLogger(ga.getClass().getName());
 		for (int i = 0; i < generations; i++) {
 			ga.next();
-			logger.finest("fitness(" + i + ") = " + prettyArray(fromIndex(ga.bestIndex(5), ga.fitness_)));
+			// logger.info("fitness(" + i + ") = " + prettyArray(fromIndex(ga.bestIndex(5), ga.fitness_)));
+			if (logger.isLoggable(Level.FINEST)) // speed-up, no need for prettyarray
+				logger.finest("fitness(" + i + ") = " + prettyArray(fromIndex(ga.bestIndex(5), ga.fitness_)));
 		}
 		return ga;
 	}
