@@ -5,6 +5,32 @@ import svu.util.ListUtil;
 
 public class StaticRulesMain {
 	
+	
+	public static void quickRules(ProteinSequence[] data) {
+
+		String negative = data[0].original.replace("_", "");
+		
+		for (int i = 1; i < data.length; i++) {
+			
+			boolean found = false;
+
+			String other = data[i].original.replace("_", "");
+			for (int j = 1; !found && j < negative.length(); j++) {
+				if (negative.substring(0, j).equals(other.substring(0, j)) &&
+						negative.charAt(j) != other.charAt(j)) {
+
+					found = true;
+					System.out.println("Line: " + i + ", Position: " + j + ", Change: " + negative.charAt(j) + " => " + other.charAt(j));
+				}
+			}
+
+			if (!found)
+				System.out.println("Line: " + i + ", No Change.");
+		}
+		
+		
+	}
+	
 	public static void main(String[] args) throws Exception {
 
 		// load data
@@ -12,6 +38,8 @@ public class StaticRulesMain {
 		// 
 		double[][] X = ProteinSequence.xValues(data);
 		int[] Y = ProteinSequence.yValues(data);
+		
+		quickRules(data);
 		
 		// build static classifier
 		DecisionRuleClassifier clfStatic = ProteinSequenceClassifiers.newStatic();

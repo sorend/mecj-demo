@@ -25,7 +25,7 @@ public class MultimodalEvolutionaryClassifier {
 	public Random random = new Random();
 	
 	private Map<Integer, SimpleFitnessFunction> models_;
-	private int[] classes_;
+	public int[] classes_;
 	private DistanceFunction distance_;
 	
 	// genetic algorithm parameters
@@ -116,5 +116,15 @@ public class MultimodalEvolutionaryClassifier {
 		}
 		
 		return result;
+	}
+	
+	// give confidence values for each class.
+	public double[][] predictProba(double[][] testingX) {
+		double[][] R = new double[testingX.length][classes_.length];
+		for (int i = 0; i < testingX.length; i++) {
+			for (int j = 0; j < classes_.length; j++)
+				R[i][j] = models_.get(classes_[j]).fitness(testingX[i]);
+		}
+		return R;
 	}
 }

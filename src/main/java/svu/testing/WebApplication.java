@@ -12,11 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import svu.meclassifier.MinkowskiDistanceFunction;
-import svu.meclassifier.MultimodalEvolutionaryClassifier;
 import svu.proteinsequences.DecisionRuleClassifier;
 import svu.proteinsequences.ProteinSequence;
 import svu.proteinsequences.ProteinSequenceClassifiers;
 import svu.util.CSVUtil;
+import svu.meclassifier.MultimodalEvolutionaryClassifier;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;

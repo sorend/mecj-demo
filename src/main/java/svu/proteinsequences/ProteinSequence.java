@@ -51,18 +51,21 @@ public class ProteinSequence {
 			if (line == null)
 				break;
 			String[] a = line.split(",");
-			list.add(new ProteinSequence(stringToDoubles(a[0]), Integer
-					.parseInt(a[1])));
+			list.add(new ProteinSequence(a[0], 
+										 stringToDoubles(a[0]), 
+										 Integer.parseInt(a[1])));
 		}
 		br.close();
 
 		return list.toArray(new ProteinSequence[list.size()]);
 	}
 
+	public final String original;
 	public final double[] sequence;
 	public final int cls;
 
-	public ProteinSequence(double[] sequence, int cls) {
+	public ProteinSequence(String original, double[] sequence, int cls) {
+		this.original = original;
 		this.sequence = sequence;
 		this.cls = cls;
 	}
