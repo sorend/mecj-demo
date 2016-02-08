@@ -14,7 +14,6 @@ public abstract class BaseGeneticAlgorithm {
 		Logger logger = Logger.getLogger(ga.getClass().getName());
 		for (int i = 0; i < generations; i++) {
 			ga.next();
-			// logger.info("fitness(" + i + ") = " + prettyArray(fromIndex(ga.bestIndex(5), ga.fitness_)));
 			if (logger.isLoggable(Level.FINEST)) // speed-up, no need for prettyarray
 				logger.finest("fitness(" + i + ") = " + prettyArray(fromIndex(ga.bestIndex(5), ga.fitness_)));
 		}

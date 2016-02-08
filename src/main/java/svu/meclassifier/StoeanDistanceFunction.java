@@ -2,6 +2,8 @@ package svu.meclassifier;
 
 import java.util.Arrays;
 
+import svu.util.ListUtil;
+
 
 public class StoeanDistanceFunction implements DistanceFunction {
 	
@@ -33,10 +35,12 @@ public class StoeanDistanceFunction implements DistanceFunction {
 	}
 	
 	@Override
-	public double distance(double[] a, double[] b) {
+	public double distance(double[] a, double[] b, int[] featureIdx) {
 		double sum = 0;
-		for (int i = 0; i < d.length; i++)
-			sum += Math.abs(a[i] - b[i]) / d[i];
+		for (int i = 0; i < featureIdx.length; i++) {
+			sum += Math.abs(a[featureIdx[i]] - b[featureIdx[i]]) / d[featureIdx[i]];
+		}
 		return sum;
 	}
+	
 }

@@ -12,10 +12,10 @@ public class EuclideanDistanceFunction implements DistanceFunction {
 	private EuclideanDistanceFunction() {}
 
 	@Override
-	public double distance(double[] a, double[] b) {
+	public double distance(double[] a, double[] b, int[] featureIdx) {
 		double sum = 0;
-		for (int i = 0; i < a.length; i++) {
-			double v = Math.abs(a[i] - b[i]);
+		for (int i = 0; i < featureIdx.length; i++) {
+			double v = Math.abs(a[featureIdx[i]] - b[featureIdx[i]]);
 			sum += (v * v);
 		}
 		return Math.sqrt(sum);

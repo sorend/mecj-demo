@@ -12,10 +12,10 @@ public class ManhattanDistanceFunction implements DistanceFunction {
 	private ManhattanDistanceFunction(){}
 
 	@Override
-	public double distance(double[] a, double[] b) {
+	public double distance(double[] a, double[] b, int[] featureIdx) {
 		double sum = 0;
-		for (int i = 0; i < a.length; i++)
-			sum += Math.abs(a[i] - b[i]);
+		for (int i = 0; i < featureIdx.length; i++)
+			sum += Math.abs(a[featureIdx[i]] - b[featureIdx[i]]);
 		return sum;
 	}
 
