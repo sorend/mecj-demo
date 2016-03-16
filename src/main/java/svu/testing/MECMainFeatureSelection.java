@@ -17,6 +17,7 @@ import svu.meclassifier.ManhattanDistanceFunction;
 import svu.meclassifier.MinkowskiDistanceFunction;
 import svu.meclassifier.MultimodalEvolutionaryClassifier;
 import svu.meclassifier.StoeanDistanceFunction;
+import svu.proteinsequences.AccuracyHelper;
 import svu.util.CSVUtil;
 import svu.util.ListUtil;
 
@@ -53,7 +54,7 @@ public class MECMainFeatureSelection {
 		System.out.println("Y_test   = " + ListUtil.prettyArray(Y_test));
 	}
 	
-	public static Callable<Double> buildCallable(final double[][] X, final int[] Y, final DistanceFunctionFactory df) {
+	public static Callable<Double> buildCallable(final double[][] X, final int[] Y, final DistanceFunctionFactory df, final int[] featureIdx) {
 
 		return new Callable<Double>() {
 			@Override
@@ -69,29 +70,21 @@ public class MECMainFeatureSelection {
 				int[] Y_test = ListUtil.fromIndexInt(trainingTestingIdx[1], Y);
 
 				// train classifier
-				int[] featureIdx = FeatureSelectionHelper.selectWithMEC(X, Y, df);
-				MultimodalEvolutionaryClassifier mec = new MultimodalEvolutionaryClassifier(100, df)
-					.featureIdx(featureIdx)
-					.fit(X_train, Y_train);
+				MultimodalEvolutionaryClassifier mec = new MultimodalEvolutionaryClassifier(100, df);
+				if (featureIdx != null)
+					mec.featureIdx(featureIdx);
+
+				mec.fit(X_train, Y_train);
 				
 				// predict using classifier
 				int[] y_pred = mec.predict(X_test);
-				
-				// calculate accuracy
-				int correct = 0;
-				for (int i = 0; i < Y_test.length; i++) {
-					if (Y_test[i] == y_pred[i])
-						correct++;
-				}
-				
-				// System.out.println("correct=" + correct + " total=" + Y_test.length);
-				
-				return ((double)correct / Y_test.length);
+
+				return AccuracyHelper.accuracy(Y_test, y_pred);
 			}
 		};
 	}
 	
-	public static double[] diabetesTestRunner(int rounds, double[][] X, int[] Y, DistanceFunctionFactory df) throws Exception {
+	public static double[] diabetesTestRunner(int rounds, double[][] X, int[] Y, DistanceFunctionFactory df, int[] featuresIdx) throws Exception {
 
 		// setup execution pool (use all cores of the CPU)
 		int cores = Runtime.getRuntime().availableProcessors();
@@ -100,7 +93,7 @@ public class MECMainFeatureSelection {
 		// submit jobs
 		List<Future<Double>> jobs = new ArrayList<Future<Double>>();
 		for (int i = 0; i < rounds; i++)
-			jobs.add(pool.submit(buildCallable(X, Y, df)));
+			jobs.add(pool.submit(buildCallable(X, Y, df, featuresIdx)));
 
 		double res[] = new double[rounds];
 		double sum = 0;
@@ -124,7 +117,7 @@ public class MECMainFeatureSelection {
 		
 		return new double[]{ mean, stddev };
 	}
-	
+
 	public static void diabetesTest() throws Exception {
 
 		// read dataset
@@ -138,23 +131,76 @@ public class MECMainFeatureSelection {
 		// run
 		int rounds = 10;
 
-		double[] accuracy = diabetesTestRunner(rounds, X, Y, StoeanDistanceFunction.Factory);
+		int[] featureIdx = FeatureSelectionHelper.selectWithMEC(X, Y, StoeanDistanceFunction.Factory);
+		System.out.printf("%s selected features %s\n", "stoean", ListUtil.prettyArray(featureIdx));
+		
+		featureIdx = FeatureSelectionHelper.selectWithMEC(X, Y, StoeanDistanceFunction.Factory);
+		System.out.printf("%s selected features %s\n", "stoean", ListUtil.prettyArray(featureIdx));
+
+		featureIdx = FeatureSelectionHelper.selectWithMEC(X, Y, StoeanDistanceFunction.Factory);
+		System.out.printf("%s selected features %s\n", "stoean", ListUtil.prettyArray(featureIdx));
+
+		featureIdx = FeatureSelectionHelper.selectWithMEC(X, Y, StoeanDistanceFunction.Factory);
+		System.out.printf("%s selected features %s\n", "stoean", ListUtil.prettyArray(featureIdx));
+
+		featureIdx = FeatureSelectionHelper.selectWithMEC(X, Y, StoeanDistanceFunction.Factory);
+		System.out.printf("%s selected features %s\n", "stoean", ListUtil.prettyArray(featureIdx));
+
+		featureIdx = FeatureSelectionHelper.selectWithMEC(X, Y, StoeanDistanceFunction.Factory);
+		System.out.printf("%s selected features %s\n", "stoean", ListUtil.prettyArray(featureIdx));
+
+		featureIdx = FeatureSelectionHelper.selectWithMEC(X, Y, StoeanDistanceFunction.Factory);
+		System.out.printf("%s selected features %s\n", "stoean", ListUtil.prettyArray(featureIdx));
+
+		featureIdx = FeatureSelectionHelper.selectWithMEC(X, Y, StoeanDistanceFunction.Factory);
+		System.out.printf("%s selected features %s\n", "stoean", ListUtil.prettyArray(featureIdx));
+
+		featureIdx = FeatureSelectionHelper.selectWithMEC(X, Y, StoeanDistanceFunction.Factory);
+		System.out.printf("%s selected features %s\n", "stoean", ListUtil.prettyArray(featureIdx));
+
+		featureIdx = FeatureSelectionHelper.selectWithMEC(X, Y, StoeanDistanceFunction.Factory);
+		System.out.printf("%s selected features %s\n", "stoean", ListUtil.prettyArray(featureIdx));
+
+		
+		double[] accuracy = diabetesTestRunner(rounds, X, Y, StoeanDistanceFunction.Factory, null);
 		System.out.printf("%s mean accuracy %.3f (+/- %.3f)\n", "stoean", accuracy[0] * 100, accuracy[1] * 100);
+		accuracy = diabetesTestRunner(rounds, X, Y, StoeanDistanceFunction.Factory, featureIdx);
+		System.out.printf("%s mean accuracy w/fs %.3f (+/- %.3f)\n", "stoean", accuracy[0] * 100, accuracy[1] * 100);
 
-		accuracy = diabetesTestRunner(rounds, X, Y, ManhattanDistanceFunction.Factory);
+		featureIdx = FeatureSelectionHelper.selectWithMEC(X, Y, StoeanDistanceFunction.Factory);
+		System.out.printf("%s selected features %s\n", "manhattan", ListUtil.prettyArray(featureIdx));
+		accuracy = diabetesTestRunner(rounds, X, Y, ManhattanDistanceFunction.Factory, null);
 		System.out.printf("%s mean accuracy %.3f (+/- %.3f)\n", "manhattan", accuracy[0] * 100, accuracy[1] * 100);
+		accuracy = diabetesTestRunner(rounds, X, Y, ManhattanDistanceFunction.Factory, featureIdx);
+		System.out.printf("%s mean accuracy w/fs %.3f (+/- %.3f)\n", "manhattan", accuracy[0] * 100, accuracy[1] * 100);
 
-		accuracy = diabetesTestRunner(rounds, X, Y, EuclideanDistanceFunction.Factory);
+		featureIdx = FeatureSelectionHelper.selectWithMEC(X, Y, StoeanDistanceFunction.Factory);
+		System.out.printf("%s selected features %s\n", "euclidean", ListUtil.prettyArray(featureIdx));
+		accuracy = diabetesTestRunner(rounds, X, Y, EuclideanDistanceFunction.Factory, null);
 		System.out.printf("%s mean accuracy %.3f (+/- %.3f)\n", "euclidean", accuracy[0] * 100, accuracy[1] * 100);
+		accuracy = diabetesTestRunner(rounds, X, Y, EuclideanDistanceFunction.Factory, featureIdx);
+		System.out.printf("%s mean accuracy w/fs %.3f (+/- %.3f)\n", "euclidean", accuracy[0] * 100, accuracy[1] * 100);
 
-		accuracy = diabetesTestRunner(rounds, X, Y, MinkowskiDistanceFunction.Factory(1.5));
+		featureIdx = FeatureSelectionHelper.selectWithMEC(X, Y, StoeanDistanceFunction.Factory);
+		System.out.printf("%s selected features %s\n", "minkowski(1.5)", ListUtil.prettyArray(featureIdx));
+		accuracy = diabetesTestRunner(rounds, X, Y, MinkowskiDistanceFunction.Factory(1.5), null);
 		System.out.printf("%s mean accuracy %.3f (+/- %.3f)\n", "minkowski(1.5)", accuracy[0] * 100, accuracy[1] * 100);
+		accuracy = diabetesTestRunner(rounds, X, Y, MinkowskiDistanceFunction.Factory(1.5), featureIdx);
+		System.out.printf("%s mean accuracy w/fs %.3f (+/- %.3f)\n", "minkowski(1.5)", accuracy[0] * 100, accuracy[1] * 100);
 
-		accuracy = diabetesTestRunner(rounds, X, Y, MinkowskiDistanceFunction.Factory(0.5));
+		featureIdx = FeatureSelectionHelper.selectWithMEC(X, Y, StoeanDistanceFunction.Factory);
+		System.out.printf("%s selected features %s\n", "minkowski(0.5)", ListUtil.prettyArray(featureIdx));
+		accuracy = diabetesTestRunner(rounds, X, Y, MinkowskiDistanceFunction.Factory(0.5), null);
 		System.out.printf("%s mean accuracy %.3f (+/- %.3f)\n", "minkowski(0.5)", accuracy[0] * 100, accuracy[1] * 100);
+		accuracy = diabetesTestRunner(rounds, X, Y, MinkowskiDistanceFunction.Factory(0.5), featureIdx);
+		System.out.printf("%s mean accuracy w/fs %.3f (+/- %.3f)\n", "minkowski(0.5)", accuracy[0] * 100, accuracy[1] * 100);
 
-		accuracy = diabetesTestRunner(rounds, X, Y, MinkowskiDistanceFunction.Factory(3.0));
+		featureIdx = FeatureSelectionHelper.selectWithMEC(X, Y, StoeanDistanceFunction.Factory);
+		System.out.printf("%s selected features %s\n", "minkowski(3.0)", ListUtil.prettyArray(featureIdx));
+		accuracy = diabetesTestRunner(rounds, X, Y, MinkowskiDistanceFunction.Factory(3.0), null);
 		System.out.printf("%s mean accuracy %.3f (+/- %.3f)\n", "minkowski(3.0)", accuracy[0] * 100, accuracy[1] * 100);
+		accuracy = diabetesTestRunner(rounds, X, Y, MinkowskiDistanceFunction.Factory(3.0), featureIdx);
+		System.out.printf("%s mean accuracy w/fs %.3f (+/- %.3f)\n", "minkowski(3.0)", accuracy[0] * 100, accuracy[1] * 100);
 	}
 	
 	public static void main(String[] args) throws Exception {

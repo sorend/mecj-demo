@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import svu.util.ListUtil;
 import static svu.util.ListUtil.*;
 
 public abstract class BaseGeneticAlgorithm {
@@ -62,7 +63,8 @@ public abstract class BaseGeneticAlgorithm {
 
 		if (elitism > 0) {
 			int[] sortedIdx = argsort(fitness_);
-			for (int i = 0; i < sortedIdx.length; i++)
+			int max = Math.min(elitism, sortedIdx.length);
+			for (int i = 0; i < max; i++)
 				newPopulation[i] = Arrays.copyOf(population_[sortedIdx[i]], population_[sortedIdx[i]].length);
 		}
 		

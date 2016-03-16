@@ -1,10 +1,10 @@
 package svu.evolutionary;
 
-public class SimpleFitnessWrapper implements FitnessFunction {
+public class SimpleFitnessHelper implements FitnessFunction {
 	
 	SimpleFitnessFunction sff;
 	
-	public SimpleFitnessWrapper(SimpleFitnessFunction sff) {
+	public SimpleFitnessHelper(SimpleFitnessFunction sff) {
 		this.sff = sff;
 	}
 

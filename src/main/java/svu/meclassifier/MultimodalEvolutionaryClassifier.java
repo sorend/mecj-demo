@@ -15,7 +15,7 @@ import svu.evolutionary.BaseGeneticAlgorithm;
 import svu.evolutionary.ContinousGeneticAlgorithm;
 import svu.evolutionary.SelectionMethod;
 import svu.evolutionary.SimpleFitnessFunction;
-import svu.evolutionary.SimpleFitnessWrapper;
+import svu.evolutionary.SimpleFitnessHelper;
 import svu.evolutionary.TournamentSelection;
 
 public class MultimodalEvolutionaryClassifier {
@@ -73,7 +73,7 @@ public class MultimodalEvolutionaryClassifier {
 		};
 
 		// setup genetic algorithm parameters
-		SimpleFitnessWrapper ff = new SimpleFitnessWrapper(sff);
+		SimpleFitnessHelper ff = new SimpleFitnessHelper(sff);
 		int numGenes = featureIdx.length;
 
 		ContinousGeneticAlgorithm ga = 

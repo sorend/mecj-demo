@@ -126,14 +126,18 @@ public class ListUtil {
 		return b.append("]").toString();
 	}
 	
-	public static String prettyArray(double[] arr) {
+	public static String prettyArray(double[] arr, int max) {
 		StringBuilder b = new StringBuilder("[");
-		for (int i = 0; i < arr.length; i++) {
+		for (int i = 0; i < max; i++) {
 			if (i > 0)
 				b.append(", ");
 			b.append(arr[i]);
 		}
 		return b.append("]").toString();
+	}
+	
+	public static String prettyArray(double[] arr) {
+		return prettyArray(arr, arr.length);
 	}
 
 	public static String prettyArray(int[] arr) {

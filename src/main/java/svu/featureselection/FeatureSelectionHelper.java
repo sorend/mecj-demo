@@ -27,8 +27,11 @@ public class FeatureSelectionHelper {
 			}
 		};
 		
+		int m = X[0].length;
+		int n = Math.min(4, m);
+		
 		GeneticAlgorithmFeatureSelection selection =
-				new GeneticAlgorithmFeatureSelection(evaluator);
+				new GeneticAlgorithmFeatureSelection(n, evaluator);
 		
 		return selection.selectFeatures(X, Y);
 	}
