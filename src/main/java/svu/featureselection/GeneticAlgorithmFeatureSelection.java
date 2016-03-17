@@ -1,14 +1,10 @@
 package svu.featureselection;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.logging.Logger;
 
-import svu.evolutionary.BaseGeneticAlgorithm;
 import svu.evolutionary.FitnessFunction;
 import svu.evolutionary.SelectionMethod;
 import svu.evolutionary.SimpleFitnessFunction;
@@ -21,13 +17,12 @@ public class GeneticAlgorithmFeatureSelection {
 
 	private Logger logger = Logger.getLogger(GeneticAlgorithmFeatureSelection.class.getName());
 
-	private int n;
 	private FeaturesEvaluator evaluator;
 	public Random random = new Random();
 	private Map<String, Double> cache = new HashMap<String, Double>();
+	public FeatureSelectionEncoding encoding = FeatureSelectionEncoding.Factory.fixed(3);
 
-	public GeneticAlgorithmFeatureSelection(int n, FeaturesEvaluator evaluator) {
-		this.n = n;
+	public GeneticAlgorithmFeatureSelection(FeaturesEvaluator evaluator) {
 		this.evaluator = evaluator;
 	}
 	
@@ -40,7 +35,7 @@ public class GeneticAlgorithmFeatureSelection {
 		SimpleFitnessFunction sff = new SimpleFitnessFunction() {
 			@Override
 			public double fitness(double[] chromosome) {
-				int[] featureIdx = toFeatureIdx(GeneticAlgorithmFeatureSelection.this.n, chromosome); // get features represented by this chromosome
+				int[] featureIdx = encoding.toFeaturesIdx(chromosome); // get features represented by this chromosome
 				String featureIdxKey = ListUtil.prettyArray(featureIdx);
 				if (!cache.containsKey(featureIdxKey)) {
 					double r = evaluator.evaluate(featureIdx); // evaluate features
@@ -76,55 +71,11 @@ public class GeneticAlgorithmFeatureSelection {
 		
 		int[] idx = ga.bestIndex(1);
 		double[] featuresSelected = ga.population_[idx[0]];
-		int[] featureIdx = toFeatureIdx(n, featuresSelected);
+		int[] featureIdx = encoding.toFeaturesIdx(featuresSelected);
 		
 		logger.info("Best fitness "+ga.fitness_[idx[0]]+" features " + ListUtil.prettyArray(featureIdx));
 
 		return featureIdx;
-	}
-
-	//
-	// Converts a chromosome into an index of selected features.
-	//
-	// E.g.
-	//   Chromosome (1, 0, 0, 0, 1, 0, 1)
-	//   FeatureIDX  0  1  2  3  4  5  6
-	//
-	//   Result:     0,          4,    6
-	//
-	private int[] toFeatureIdx(int dummy, double[] x) {
-		List<Integer> featureIdx = new ArrayList<Integer>();
-		for (int i = 0; i < x.length; i++)
-			if (x[i] >= 0.5) // more than 0.5 means include this feature.
-				featureIdx.add(i);
-		return ListUtil.toArray(featureIdx);
-	}
-	
-	//
-	// Converts a unit interval chromosome into an index of selected features.
-	//
-	// E.g.
-	//   n = 3
-	//   Chromosome (0.5, 0.2, 0.9, 0.3, 0.1, 0.7, 0.5)
-	//   FeatureIDX  0    1    2    3    4    5    6
-	//   Rank        4    6    1    5    7    2    3
-	//
-	//   Result:     0,   1,             4   (top n=3)
-	//
-	private int[] toFeatureIdxN(int n, double[] x) {
-		List<Integer> featureIdx = new ArrayList<Integer>();
-		int[] sorted = ListUtil.argsort(x); // actually we take smallest ones
-		for (int i = 0; i < n; i++) // count number of features wanted.
-			featureIdx.add(sorted[i]);
-		Collections.sort(featureIdx);
-		return ListUtil.toArray(featureIdx);
-	}
-
-	private String toCacheKey(int[] featureIdx) {
-		StringBuilder s = new StringBuilder();
-		for (int i = 0; i < featureIdx.length; i++)
-			s = s.append(i).append(",");
-		return s.toString();
 	}
 
 }

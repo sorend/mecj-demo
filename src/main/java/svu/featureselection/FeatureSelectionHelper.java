@@ -1,17 +1,14 @@
 package svu.featureselection;
 
-import com.sun.istack.internal.logging.Logger;
-
 import svu.meclassifier.DistanceFunctionFactory;
 import svu.meclassifier.MultimodalEvolutionaryClassifier;
 import svu.proteinsequences.AccuracyHelper;
-import svu.util.ListUtil;
 
 public class FeatureSelectionHelper {
 
-	private static Logger logger = Logger.getLogger(FeatureSelectionHelper.class);
+	// private static Logger logger = Logger.getLogger(FeatureSelectionHelper.class);
 	
-	public static int[] selectWithMEC(final double[][] X, final int[] Y, final DistanceFunctionFactory dff) {
+	public static int[] selectWithMEC(final double[][] X, final int[] Y, final DistanceFunctionFactory dff, int howManyFeatures) {
 
 		FeaturesEvaluator evaluator = new FeaturesEvaluator() {
 			@Override
@@ -27,12 +24,19 @@ public class FeatureSelectionHelper {
 			}
 		};
 		
-		int m = X[0].length;
-		int n = Math.min(4, m);
-		
 		GeneticAlgorithmFeatureSelection selection =
-				new GeneticAlgorithmFeatureSelection(n, evaluator);
-		
+				new GeneticAlgorithmFeatureSelection(evaluator);
+
+		if (howManyFeatures > 0) {
+			int m = X[0].length;
+			int n = Math.min(howManyFeatures, m);
+			selection.encoding = FeatureSelectionEncoding.Factory.fixed(n);
+		}
+		else {
+			// or do this for variable
+			selection.encoding = FeatureSelectionEncoding.Factory.variable();
+		}
+
 		return selection.selectFeatures(X, Y);
 	}
 }
