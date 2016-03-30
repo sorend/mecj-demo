@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Logger;
 
 import svu.evolutionary.BaseGeneticAlgorithm;
 import svu.evolutionary.ContinousGeneticAlgorithm;
@@ -17,10 +18,11 @@ import svu.evolutionary.SelectionMethod;
 import svu.evolutionary.SimpleFitnessFunction;
 import svu.evolutionary.SimpleFitnessHelper;
 import svu.evolutionary.TournamentSelection;
+import svu.util.ListUtil;
 
 public class MultimodalEvolutionaryClassifier {
 	
-	// private Logger logger = Logger.getLogger(this.getClass().getName());
+	private Logger logger = Logger.getLogger(this.getClass().getName());
 
 	private int numIterations;
 	private DistanceFunctionFactory df;
@@ -86,7 +88,7 @@ public class MultimodalEvolutionaryClassifier {
 		int[] idx = ga.bestIndex(1);
 		final double[] model = decodeChromosome(ga.population_[idx[0]], featureIdx, m);
 
-		// logger.info("class " + clz + " model " + prettyArray(model) + " featureIdx " + prettyArray(featureIdx)); // show what we learned
+		logger.info("class " + clz + " model " + ListUtil.prettyArray(model) + " featureIdx " + ListUtil.prettyArray(featureIdx)); // show what we learned
 
 		return new SimpleFitnessFunction() {
 			@Override

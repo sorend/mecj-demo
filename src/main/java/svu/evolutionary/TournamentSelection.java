@@ -20,8 +20,8 @@ public class TournamentSelection implements SelectionMethod {
 		for (int i = 0; i < tournamentMembers.length; i++)
 			tournamentFitness[i] = fitness[tournamentMembers[i]];
 		
-		int[] tmSorted = argsort(tournamentFitness);
-		return new int[]{ tmSorted[0], tmSorted[1] };
+		int[] tfSorted = argsort(tournamentFitness);
+		return new int[]{ tournamentMembers[tfSorted[0]], tournamentMembers[tfSorted[1]] };
 	}
 
 }

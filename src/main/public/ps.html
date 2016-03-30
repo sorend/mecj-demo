@@ -12,7 +12,9 @@
 	<form>
 		<div class="row">
 			<div class="col-xs-12">
-				<textarea rows="7" class="form-control" style="min-width: 100%" name="seq"></textarea>
+				<textarea rows="7" class="form-control" style="min-width: 100%" name="seq" id="seq" placeholder="Enter sequence here"></textarea>
+				<div class="well" id="validOutput">
+				</div>
 			</div>
 		</div>
 		<button class="btn btn-default results">Get result</button>
@@ -21,6 +23,7 @@
 	<script src="/public/js/jquery-2.1.3.min.js"></script>
 	<script src="/public/js/bootstrap.min.js"></script>
 	<script src="/public/js/rangeslider.min.js"></script>
+	<script src="/public/js/palette.js"></script>
 	<script>
 		// show selected value
 		function outputValue(elem) {
@@ -28,13 +31,63 @@
 			elem.closest("div").find("output").html(val);
 		}
 
-		// init
-		var elems = $("input[type=range]");
-		elems.rangeslider({polyfill: false});
-		elems.each(function(idx, elem){ outputValue($(elem)); })
-			.change(function(e){
-				outputValue($(e.target));
-			});
+		var valids = [
+			["R", "Arginine - Arg"],
+			["K", "Lysine - Lys"],
+			["D", "Aspartic acid - Asp"],
+			["E", "Glutamic acid - Glu"],
+			//
+			["Q", "Glutamine - Gln"],
+			["N", "Asparagine - Asn"],
+			["H", "Histidine - His"],
+			["S", "Serine - Ser"],
+			["T", "Threonine - Thr"],
+			["Y", "Tyrosine - Tyr"],
+			["C", "Systeine - Cys"],
+			["M", "Methionine - Met"],
+			["W", "Tryptophan - Trp"],
+			//
+			["A", "Alanine - Ala"],
+			["I", "Isoleucine - Ile"],
+			["L", "Leucine - Leu"],
+			["F", "Phenylalanine- Phe"],
+			["V", "Valine - Val"],
+			["P", "Proline - Pro"],
+			["G", "Glycine - Gly"]
+		];
+		console.log(valids);
+		var validsColors = palette("rainbow", valids.length);
+		valids = $.map(valids, function(e, i){ e.push(validsColors[i]); return [ e ]; });
+		var validsKeys = {};
+		for (var i = 0; i < valids.length; i++)
+			validsKeys[valids[i][0]] = i;
+		
+		var div = $("#seq");
+		var validOutput = $("#validOutput");
+
+		function updateInput() {
+			validOutput.html("");
+			var val = div.val();
+			var fval = "";
+			for (var i = 0; i < val.length; i++) {
+				var x = val[i].toUpperCase();
+				if (validsKeys[x] !== undefined) {
+					var v = valids[validsKeys[x]];
+					fval += x;
+					$("<span class='label' title='"+v[1]+"' style='background-color: #"+v[2]+"; margin-right: 2px;'>"+x+"</span>").appendTo(validOutput);
+					validOutput.append(" ");
+				}
+			}
+			div.val(fval);
+		}
+
+		div.bind("input propertychange", function(e) {
+			if (window.event && event.type == "propertychange" && event.propertyName != "value")
+		        return;
+		    // Clear any previously set timer before setting a fresh one
+		    window.clearTimeout($(this).data("timeout"));
+		    $(this).data("timeout", setTimeout(updateInput, 1000));
+		}); // bind
 		
 		// handle form
 		$("button.results").click(function(e){
