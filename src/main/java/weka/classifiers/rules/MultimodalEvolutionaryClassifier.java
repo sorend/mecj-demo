@@ -5,7 +5,6 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import svu.meclassifier.DistanceFunctionFactory;
-import svu.util.ListUtil;
 import weka.classifiers.AbstractClassifier;
 import weka.core.Capabilities;
 import weka.core.Capabilities.Capability;
