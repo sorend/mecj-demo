@@ -71,4 +71,4 @@ You can use the code directly in JAVA without the WEKA wrapper. The **fit** meth
 Credits
 -------
 
-The code has been implemented by Soren A. Davidsen as part of his research work at [http://www.svuniversity.ac.in/]{S. V. University, India}. You can contact E. Sreedevi and K. Vijayalakshmi for information regarding the demonstration applications (part of their research work).
+The code has been implemented by Soren A. Davidsen as part of his research work at [S. V. University, India](http://www.svuniversity.ac.in/). You can contact E. Sreedevi and K. Vijayalakshmi for information regarding the demonstration applications (part of their research work).
