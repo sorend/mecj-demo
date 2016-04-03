@@ -2,17 +2,23 @@
 Multimodal Evolutionary Classifier, Java implementation
 ==============
 
-This is a Java implementation of the Multimodal Evolutionary classifier.
+This is a Java implementation of the Multi-modal Evolutionary Classifier.
 
 The multi-modal evolutionary classifier is learns a reference vector for each
-of the classes in the training data by applying a genetic algorithm to the
+of the classes in the training data by applying a genetic algorithm (GA) to the
 the following optimization problem:
 
-    Minimize: Sum(d(c, x_i))  for all i
+    Minimize: Sum(d(c, x))  for x in X
 
-where *c* is a chromosome in the GA, and x_i is a training example, and *d(..)* is a distance measure. It is called multi-modal because the GA is able to capture minimization that an uni-modal optimization can not (e.g. gradient descent). Meaning, it can deal with data containing more local optima.
+where *c* is a chromosome in the GA, and *x* is a training example from the set of training examples *X*, and *d(a, b)* is a distance measure. It is called multi-modal because the GA is able to capture minimization that an uni-modal optimization can not (e.g. gradient descent). Meaning, it can deal with data containing more local optima.
 
-The distance measure *d(a, b)* can be substituted by any of the available distance measures. For example the stoean and minkowski distance measures are expected to work better for non-normalized data, while manhattan and euclidean are faster (expected to be the same) on normalized data. 
+Once the reference vectors are learned, classification is done by selecting the reference vector nearest to the new data:
+
+    y = arg min d(x, c_i)   for i in K
+
+where *y* is the predicted class, *d(a, b)* is the distance measure, *x* is the new data, *c_i* is the reference vector for the *i'th* class in the set of classes *K*.
+
+The distance measure *d(a, b)* can be substituted by any of the available distance measures. For example the stoean and minkowski distance measures are expected to work better for non-normalized data, while manhattan and euclidean are faster (expected to be the same) on normalized data.
 
 Demo usage
 ----------
