@@ -19,6 +19,3 @@ dependencies {
 	compile 'nz.ac.waikato.cms.weka:weka-dev:3.7.12'
 }
 
-task wrapper(type: Wrapper) {
-	gradleVersion = '2.3'
-}
