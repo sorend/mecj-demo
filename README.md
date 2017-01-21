@@ -44,11 +44,11 @@ Using in JAVA code
 ------------------
 
 You can use the code directly in JAVA without the WEKA wrapper. The **fit** method is used for training and expects input as a matrix of double (array of array of double) and an array of integers representing the classes. After this you can use the **predict** method to predict new examples. It expects the same input, matrix of double and will give array of integers back.
- 
+
  A more complete example below:
- 
+
     DistanceFactory df = MinkowskiDistanceFunction.Factory(1.5);
-    MultimodalEvolutionaryClassifier mec = 
+    MultimodalEvolutionaryClassifier mec =
        new MultimodalEvolutionaryClassifier(100, df);
 
     // define some training data and associated classes
@@ -57,8 +57,8 @@ You can use the code directly in JAVA without the WEKA wrapper. The **fit** meth
 		{ 2, 4, 8 }
 	};
 	int[] Y_train = new int[] {	0, 1 };
-	
-	// train the classifier	
+
+	// train the classifier
 	mec.fit(X_train, Y_train);
 
 	// define some testing data
@@ -67,13 +67,13 @@ You can use the code directly in JAVA without the WEKA wrapper. The **fit** meth
 		{2.1, 3.9, 7.8}
 	};
 
-	// predict classes of the testing data		
+	// predict classes of the testing data
 	int[] Y_test = mec.predict(X_test);
-		
-	System.out.println("Y_actual = " + ListUtil.prettyArray(new int[]{ 0, 1 }));
-	System.out.println("Y_test   = " + ListUtil.prettyArray(Y_test));	
 
-	
+	System.out.println("Y_actual = " + ListUtil.prettyArray(new int[]{ 0, 1 }));
+	System.out.println("Y_test   = " + ListUtil.prettyArray(Y_test));
+
+
 Credits
 -------
 
