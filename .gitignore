@@ -1,3 +1,6 @@
+*.iws
+*.ipr
+.idea
 .settings
 .classpath
 .project

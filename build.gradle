@@ -1,21 +1,28 @@
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'maven'
 apply plugin: 'application'
 
 mainClassName = 'svu.testing.WebApplication'
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
+sourceCompatibility = 1.8
+group = "in.svuni"
+version = "1.0-SNAPSHOT"
 
 jar {
-	baseName = 'mecj'
-	version = '0.0.1'
+  baseName = 'mecj'
 }
 
 repositories {
-	mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-	compile 'nz.ac.waikato.cms.weka:weka-dev:3.7.12'
+  compile 'nz.ac.waikato.cms.weka:weka-dev:3.7.12'
 }
 
+// deploy to conjars
+task deploy(type: Exec, dependsOn: install) {
+  executable "scp"
+  args "${buildDir}/poms/pom-default.xml", "${buildDir}/libs/mecj-${version}.jar", "repo@conjars.org:"
+}
