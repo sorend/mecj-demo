@@ -18,6 +18,10 @@ repositories {
 
 dependencies {
   compile 'nz.ac.waikato.cms.weka:weka-dev:3.7.12'
+  compile group: 'ro.pippo', name: 'pippo-core', version: '1.4.0'
+  runtime group: 'ro.pippo', name: 'pippo-jetty', version: '1.4.0'
+  runtime group: 'ro.pippo', name: 'pippo-gson', version: '1.4.0'
+  runtime group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
 }
 
 // deploy to conjars

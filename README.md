@@ -34,6 +34,16 @@ Then open one of the following URLs in your browser:
 - http://127.0.0.1:8080/public/index.html (prediction using MEC)
 - http://127.0.0.1:8080/public/ps.html    (prediction using RBDC)
 
+Using in Eclipse
+----------------
+
+To load the project in Eclipse, use the standard Gradle way:
+
+- Run ``gradlew eclipse``
+- In Eclipse: File > Import > Import Existing Project into Workspace
+
+You should now be up and running in Eclipse.
+
 Using with WEKA
 ---------------
 
