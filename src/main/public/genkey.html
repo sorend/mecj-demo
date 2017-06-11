@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+	<link href="/public/css/bootstrap.min.css" rel="stylesheet"/>
+	<link href="/public/css/bootstrap-theme.min.css" rel="stylesheet"/>
+	<link href="/public/css/rangeslider.min.css" rel="stylesheet"/>
+	<script src="/public/js/jquery-2.1.3.min.js"></script>
+	<script src="/public/js/bootstrap.min.js"></script>
+	<script src="/public/js/rangeslider.min.js"></script>
+</head>
+<body>
+	<div class="container-fluid">
+	<h1>MPRSA3 key generator</h1>
+	<div class="result alert alert-info" role="alert">Press generate key to get a new key pair
+	</div>
+	<form>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="form-group">
+					<label>Public key</label>
+					<textarea style="width: 100%; height: 10em;" name="publicKey"></textarea>
+				</div>
+				<div class="form-group">
+					<label>Private key</label>
+					<textarea style="width: 100%; height: 10em;" name="privateKey"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-6">
+				<button class="btn btn-default genkey">Generate key</button>
+			</div>
+		</div>
+	</form>
+	</div>
+	<script>
+		// handle form
+		$("button.genkey").click(function(e){
+			e.preventDefault();
+			var result = $(".result");
+			$.ajax("/genkey", { dataType:"json", method: "GET" })
+				.done(function(data){
+					$("textarea[name=publicKey]").val(data.publicKey).change();
+					$("textarea[name=privateKey]").val(data.privateKey).change();
+					result.removeClass("alert-success alert-danger alert-info").addClass("alert-success")
+						.html("Generated keys. Please save them for further use.");
+				})
+				.fail(function(){
+					result.addClass("alert-danger").html("Error getting new key.");
+				});
+			return false;
+		});
+	</script>
+</body>
+</html>
