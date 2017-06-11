@@ -28,6 +28,12 @@ dependencies {
   compile group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0' // used for password encryption
 }
 
+task showDatabase(type: JavaExec) {
+	classpath = sourceSets.main.runtimeClasspath
+	main = 'org.h2.tools.Shell'
+	args "-url", "jdbc:h2:./database", "-sql", "select * from users"
+}
+
 // deploy to conjars
 task deploy(type: Exec, dependsOn: install) {
   executable "scp"
