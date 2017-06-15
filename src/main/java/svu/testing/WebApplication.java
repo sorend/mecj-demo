@@ -1,9 +1,12 @@
 package svu.testing;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Optional;
+
+import org.apache.commons.io.FileUtils;
 
 import ro.pippo.core.Application;
 import ro.pippo.core.Pippo;
@@ -164,6 +167,16 @@ public class WebApplication {
 		Application app = new Application() {
 			@Override
 			protected void onInit() {
+				GET("/public.*", new RouteHandler() {
+					@Override
+					public void handle(RouteContext routeContext) {
+						if (routeContext.getSession("username") == null) {
+					        routeContext.redirect("/login");
+						}
+						else
+							routeContext.next();
+					}
+				});
 				GET("/predict", new RouteHandler() {
 					@Override
 					public void handle(RouteContext routeContext) {
@@ -188,7 +201,7 @@ public class WebApplication {
 				GET("/load", new RouteHandler() {
 					@Override
 					public void handle(RouteContext routeContext) {
-						String username = routeContext.getParameter("username").toString();
+						String username = routeContext.getSession("username").toString();
 						String privateKey = routeContext.getParameter("privateKey").toString();
 						Optional<String> measures = dao.loadMeasures(username, privateKey);
 						routeContext.json().send(createMeasures(measuresDoubles(measures)));
@@ -198,7 +211,7 @@ public class WebApplication {
 					@Override
 					public void handle(RouteContext routeContext) {
 						double[] newUserParams = params(routeContext);
-						String username = routeContext.getParameter("username").toString();
+						String username = routeContext.getSession("username").toString();
 						String publicKey = routeContext.getParameter("publicKey").toString();
 						dao.saveMeasures(username, measuresString(newUserParams), publicKey);
 						routeContext.status(200).send("OK");
@@ -212,6 +225,35 @@ public class WebApplication {
 						keys.setPrivateKey(instance.getPrivateKey());
 						keys.setPublicKey(instance.getPublicKey());
 						routeContext.json().send(keys);
+					}
+				});
+				GET("/user", new RouteHandler() {
+					@Override
+					public void handle(RouteContext routeContext) {
+						routeContext.json().send("{\"username\":\"" + routeContext.getSession("username") + "\"}");
+					}
+				});
+				GET("/login", new RouteHandler() {
+					@Override
+					public void handle(RouteContext routeContext) {
+						try {
+							routeContext.html().send(FileUtils.readFileToString(new File("src/main/public/login.html")));
+						}
+						catch (IOException e) {
+							throw new RuntimeException("Error reading file");
+						}
+					}
+				});
+				POST("/login", new RouteHandler() {
+					@Override
+					public void handle(RouteContext routeContext) {
+						String username = routeContext.getParameter("username").toString();
+						String password = routeContext.getParameter("password").toString();
+						if (dao.verifyUser(username, password)) {
+							routeContext.resetSession();
+							routeContext.setSession("username", username);
+						}
+						routeContext.redirect("/public/index.html");
 					}
 				});
 			}

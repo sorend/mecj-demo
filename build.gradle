@@ -22,16 +22,22 @@ dependencies {
   runtime group: 'ro.pippo', name: 'pippo-jetty', version: '1.4.0'
   runtime group: 'ro.pippo', name: 'pippo-gson', version: '1.4.0'
   runtime group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25' // logging
-  // compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.18.0' // database driver
   compile group: 'com.h2database', name: 'h2', version: '1.4.195'
   compile group: 'org.dalesbred', name: 'dalesbred', version: '1.2.3' // used for database
   compile group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0' // used for password encryption
+  compile group: 'commons-io', name: 'commons-io', version: '2.5'
 }
 
 task showDatabase(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	main = 'org.h2.tools.Shell'
 	args "-url", "jdbc:h2:./database", "-sql", "select * from users"
+}
+
+task createUser(type: JavaExec) {
+	classpath = sourceSets.main.runtimeClasspath
+	main = 'svu.userdb.CreateUserMain'
+	args System.properties.'username' ?: "default", System.properties.'password' ?: "none"
 }
 
 // deploy to conjars

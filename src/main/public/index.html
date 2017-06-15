@@ -18,7 +18,7 @@
 			<div class="col-xs-12">
 				<div class="form-group">
 					<label>Patient name</label>
-					<span class="username">(none)</span>
+					<span class="username">(?)</span>
 					<output></output>
 				</div>
 			</div>
@@ -73,7 +73,6 @@
 			</div>
 			<div class="col-xs-6">
 				<div class="pull-right">
-					<input name="username" placeholder="Username...">
 					<button class="btn btn-primary save">Save</button>
 					<button class="btn btn-primary load">Load</button>
 					<button class="btn btn-primary randomize">Randomize Data</button><br>
@@ -135,20 +134,18 @@
 		
 		$("button.load").click(function(e){
 			e.preventDefault();
-			var username = $("input[name=username]").val();
 			var privateKey = prompt("Please paste your PRIVATE KEY here");
 			var result = $(".result");
-			$.ajax("/load", {dataType: "json", data: {username: username, privateKey: privateKey}, method: "GET"})
+			$.ajax("/load", {dataType: "json", data: {privateKey: privateKey}, method: "GET"})
 				.done(function(data) {
 					result.removeClass("alert-success alert-danger alert-info").addClass("alert-success")
 						.html("Measures loaded.");
-					$("span.username").html($("input[name=username]").val());
 					for (var key in data) {
 						$("input[name="+key+"]").val(data[key]).change();
 					}
 				})
 				.fail(function() {
-					result.addClass("alert-danger").html("Error loading (check your username and/or key).");
+					result.addClass("alert-danger").html("Error loading (check your private key).");
 				});
 			return false;
 		});
@@ -179,6 +176,10 @@
 			
 			return false;
 		});
+		
+		$.ajax("/user", {dataType:"json"}).done(function(data) {
+			$("span.username").html(data.username);
+		}).fail(function(e) { console.log("Failed loading username"); console.log(e); });
 		
 	</script>
 </body>

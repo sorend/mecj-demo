@@ -4,6 +4,7 @@ public final class User {
 
 	public String username;
 	public String encryptedMeasures;
+	public String encryptedPassword;
 
 	@Override
 	public String toString() {
