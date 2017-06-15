@@ -8,4 +8,4 @@ bin
 build
 .gradle
 x_libs
-database.mv.db
+database*

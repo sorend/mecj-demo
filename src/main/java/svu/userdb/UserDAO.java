@@ -14,7 +14,7 @@ import svu.mprsa.MPRSA3;
 
 public class UserDAO {
 
-	Database database = Database.forUrlAndCredentials("jdbc:h2:./database", "", "");
+	Database database = Database.forUrlAndCredentials("jdbc:h2:./database2", "", "");
 	
 	public UserDAO() {
 		database.update("CREATE TABLE IF NOT EXISTS users (username VARCHAR(250) PRIMARY KEY, encryptedPassword VARCHAR(250), encryptedMeasures TEXT NULL)");

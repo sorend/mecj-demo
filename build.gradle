@@ -31,7 +31,7 @@ dependencies {
 task showDatabase(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	main = 'org.h2.tools.Shell'
-	args "-url", "jdbc:h2:./database", "-sql", "select * from users"
+	args "-url", "jdbc:h2:./database2", "-sql", "select * from users"
 }
 
 task createUser(type: JavaExec) {
