@@ -19,7 +19,6 @@ import svu.proteinsequences.DecisionRuleClassifier;
 import svu.proteinsequences.ProteinSequence;
 import svu.proteinsequences.ProteinSequenceClassifiers;
 import svu.userdb.UserDAO;
-import svu.util.CSVUtil;
 
 public class WebApplication {
 

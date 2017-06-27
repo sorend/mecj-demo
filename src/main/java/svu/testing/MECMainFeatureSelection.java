@@ -17,8 +17,7 @@ import svu.meclassifier.ManhattanDistanceFunction;
 import svu.meclassifier.MinkowskiDistanceFunction;
 import svu.meclassifier.MultimodalEvolutionaryClassifier;
 import svu.meclassifier.StoeanDistanceFunction;
-import svu.proteinsequences.AccuracyHelper;
-import svu.util.CSVUtil;
+import svu.util.AccuracyHelper;
 import svu.util.ListUtil;
 
 public class MECMainFeatureSelection {

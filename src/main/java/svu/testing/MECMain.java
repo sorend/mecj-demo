@@ -16,7 +16,6 @@ import svu.meclassifier.ManhattanDistanceFunction;
 import svu.meclassifier.MinkowskiDistanceFunction;
 import svu.meclassifier.MultimodalEvolutionaryClassifier;
 import svu.meclassifier.StoeanDistanceFunction;
-import svu.util.CSVUtil;
 import svu.util.ListUtil;
 
 public class MECMain {

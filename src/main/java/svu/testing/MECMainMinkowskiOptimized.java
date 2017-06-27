@@ -15,7 +15,6 @@ import svu.heuristics.PatternSearch;
 import svu.meclassifier.DistanceFunctionFactory;
 import svu.meclassifier.MinkowskiDistanceFunction;
 import svu.meclassifier.MultimodalEvolutionaryClassifier;
-import svu.util.CSVUtil;
 import svu.util.ListUtil;
 
 public class MECMainMinkowskiOptimized {

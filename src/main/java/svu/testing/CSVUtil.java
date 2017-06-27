@@ -1,4 +1,4 @@
-package svu.util;
+package svu.testing;
 
 import java.io.BufferedReader;
 import java.io.IOException;

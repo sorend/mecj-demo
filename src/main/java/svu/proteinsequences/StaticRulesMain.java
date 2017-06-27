@@ -1,5 +1,6 @@
 package svu.proteinsequences;
 
+import svu.util.AccuracyHelper;
 import svu.util.ListUtil;
 
 

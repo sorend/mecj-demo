@@ -5,11 +5,16 @@ apply plugin: 'application'
 
 mainClassName = 'svu.testing.WebApplication'
 sourceCompatibility = 1.8
-group = "in.svuni"
+group = "svu"
 version = "1.0-SNAPSHOT"
 
+repositories {
+    mavenCentral()
+    maven { url "http://conjars.org/repo" }
+}
+
 jar {
-  baseName = 'mecj'
+  baseName = 'mecj-demo'
 }
 
 repositories {
@@ -17,7 +22,7 @@ repositories {
 }
 
 dependencies {
-  compile 'nz.ac.waikato.cms.weka:weka-dev:3.7.12' // weka
+  compile "svu:mecj:0.1" // mecj classifier
   compile group: 'ro.pippo', name: 'pippo-core', version: '1.4.0' // used for web server
   runtime group: 'ro.pippo', name: 'pippo-jetty', version: '1.4.0'
   runtime group: 'ro.pippo', name: 'pippo-gson', version: '1.4.0'
@@ -38,10 +43,4 @@ task createUser(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	main = 'svu.userdb.CreateUserMain'
 	args System.properties.'username' ?: "default", System.properties.'password' ?: "none"
-}
-
-// deploy to conjars
-task deploy(type: Exec, dependsOn: install) {
-  executable "scp"
-  args "${buildDir}/poms/pom-default.xml", "${buildDir}/libs/mecj-${version}.jar", "repo@conjars.org:"
 }
