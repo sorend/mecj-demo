@@ -33,6 +33,12 @@ dependencies {
   compile group: 'commons-io', name: 'commons-io', version: '2.5'
 }
 
+task openDatabase(type: JavaExec) {
+	classpath = sourceSets.main.runtimeClasspath
+	main = "org.h2.tools.Server"
+	args "-web", "-browser", "-baseDir", project.projectDir
+}
+
 task showDatabase(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	main = 'org.h2.tools.Shell'

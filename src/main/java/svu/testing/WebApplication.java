@@ -255,6 +255,33 @@ public class WebApplication {
 						routeContext.redirect("/public/index.html");
 					}
 				});
+				GET("/logout", new RouteHandler() {
+					@Override
+					public void handle(RouteContext routeContext) {
+						routeContext.resetSession();
+						routeContext.redirect("/login");
+					}
+				});
+				GET("/register", new RouteHandler() {
+					@Override
+					public void handle(RouteContext routeContext) {
+						try {
+							routeContext.html().send(FileUtils.readFileToString(new File("src/main/public/register.html")));
+						}
+						catch (IOException e) {
+							throw new RuntimeException("Error reading file");
+						}
+					}
+				});
+				POST("/register", new RouteHandler() {
+					@Override
+					public void handle(RouteContext routeContext) {
+						String username = routeContext.getParameter("username").toString();
+						String password = routeContext.getParameter("password").toString();
+						dao.createUser(username, password);
+						routeContext.redirect("/login");
+					}
+				});
 			}
 		};
 		
