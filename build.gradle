@@ -24,7 +24,7 @@ repositories {
 dependencies {
   compile "svu:mecj:0.1.1-2-gdd0f6be" // mecj classifier
   compile group: 'ro.pippo', name: 'pippo-core', version: '1.12.0' // used for web server
-  runtime group: 'ro.pippo', name: 'pippo-jetty', version: '1.12.0'
+  runtime group: 'ro.pippo', name: 'pippo-jetty', version: '1.13.0'
   runtime group: 'ro.pippo', name: 'pippo-gson', version: '1.12.0'
   runtime group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30' // logging
   compile group: 'com.h2database', name: 'h2', version: '1.4.200'
